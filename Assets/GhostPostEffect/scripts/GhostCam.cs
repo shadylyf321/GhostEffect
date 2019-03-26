@@ -29,6 +29,7 @@ public class GhostCam : MonoBehaviour
     Shader XayRimShader = null;
     Material ghoastMaterial = null;
     Material xayRimMaterial = null;
+    Material blurMaterial = null;
     RenderTexture[] textureG = new RenderTexture[2];
     RenderTexture sourceTex;
     RenderTexture curTargetTex;
@@ -36,6 +37,7 @@ public class GhostCam : MonoBehaviour
     Transform skeleton;
     bool isSupport = true;
     bool isSupportRim = true;
+    bool isSupportBlur = true;
     Coroutine showCor;
     Coroutine stopCor;
     Material[] materialG = new Material[2];
@@ -62,6 +64,15 @@ public class GhostCam : MonoBehaviour
         }
         else
             isSupportRim = false;
+
+        var blurShader = Shader.Find("Custom/Blur");
+        if (blurShader != null && blurShader.isSupported)
+        {
+            blurMaterial = new Material(blurShader);
+            blurMaterial.SetFloat("_BlurRadius", 1f);
+        }
+        else
+            isSupportBlur = false; 
 
         textureG[0] = new RenderTexture(Screen.width, Screen.height, 16, RenderTextureFormat.ARGB32);
         textureG[1] = new RenderTexture(Screen.width, Screen.height, 16, RenderTextureFormat.ARGB32);
